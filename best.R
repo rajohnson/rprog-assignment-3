@@ -24,6 +24,7 @@ best <- function(state, outcome) {
   suppressWarnings(data[,conditioncol] <- as.numeric(data[,conditioncol])) #warnings suppressed, coercing to numeric
 
   # Return hospital name in that state with lowest 30-day death rate
+  data <- subset(data, data[,7] == state)
   minval <- min(data[,conditioncol], na.rm=TRUE)
   data[which(data[,conditioncol] == minval),2]
 }
