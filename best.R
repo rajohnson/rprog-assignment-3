@@ -21,8 +21,8 @@ best <- function(state, outcome) {
   
   # Read outcome data
   data <- read.csv("outcome-of-care-measures.csv", colClasses = "character")
-  data[,conditioncol] <- as.numeric(data[,conditioncol])
- 
+  suppressWarnings(data[,conditioncol] <- as.numeric(data[,conditioncol])) #warnings suppressed, coercing to numeric
+
   # Return hospital name in that state with lowest 30-day death rate
-  
+  min(data[,conditioncol], na.rm=TRUE)
 }
