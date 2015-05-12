@@ -12,6 +12,7 @@ rankall <- function(outcome, num = "best") {
   
   # Check outcome is valid
   if(is.na(conditioncol)){
+    conditioncol
     stop("invalid outcome")
     return(geterrmessage())    
   }
@@ -22,22 +23,25 @@ rankall <- function(outcome, num = "best") {
   
   ## Return a data frame with the hospital names and the (abbreviated) state name
   data <- subset(data, !is.na(data[,conditioncol] == TRUE)) #cuts out na for condition
-  data <- data[,c(2,conditioncol)]                    #cuts off everything but name, state, and conditioncol
-  names(data)[2] <- "Rate"                            #renames conditioncol to "Rate"
-  data <- data[order(data$Rate, data$Hospital.Name),] #sorts by rate, then name
-  #  data$Rank <- 1:nrow(data)                           #adds "Rank" column
+  data <- data[,c(2,7,conditioncol)]                    #cuts off everything but name, state, and conditioncol
+  names(data)[3] <- "Rate"                            #renames conditioncol to "Rate"
+  names(data)[2] <- "state"                            #renames state to "state"
+  data <- data[order(data$state, data$Rate, data$Hospital.Name),] #sorts by state, rate, then name
+  data 
+  # for(st in state.abb)
+ #   data[,data$rank] <- 1:nrow(data$state = st)          
   
-  #return if statements
-  if(num == "best"){     #first entry
-    return(head(data$Hospital,1))
-  }
-  if(num == "worst"){    #last entry
-    return(tail(data$Hospital.Name,1))
-  } 
-  if(as.numeric(num) > nrow(data)){   #asking for nonexistent index
-    return(NA)
-  } else {               #normal return
-    return(data[num,1])
-  }
+#   #return if statements
+#   if(num == "best"){     #first entry
+#     return(head(data$Hospital,1))
+#   }
+#   if(num == "worst"){    #last entry
+#     return(tail(data$Hospital.Name,1))
+#   } 
+#   if(as.numeric(num) > nrow(data)){   #asking for nonexistent index
+#     return(NA)
+#   } else {               #normal return
+#     return(data[num,1])
+#   }
   
 }
