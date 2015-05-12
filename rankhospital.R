@@ -1,3 +1,9 @@
+## The rankhospital function ranks the hospitals in a state for a given outcome
+## based on ascending mortality rate for that outcome, and returns the name of 
+## the hospital with a specific ranking.
+## state is the two letter uppercase abbreviation for a state.
+## outcome is the health condtion of interest, it can be "heart attack", "heart failure", or "pneumonia"
+## num is the ranking desired, possible inputs are "best", "worst", and a numerical value which corresponds to a specific ranking.
 rankhospital <- function(state, outcome, num = "best") {
   
   # Tie conditioncol to appropriate column for given outcome
@@ -24,6 +30,19 @@ rankhospital <- function(state, outcome, num = "best") {
   data <- data[,c(2,conditioncol)]                    #cuts off everything but name and conditioncol
   names(data)[2] <- "Rate"                            #renames conditioncol to "Rate"
   data <- data[order(data$Rate, data$Hospital.Name),] #sorts by rate, then name
-  data$Rank <- 1:nrow(data)
-  data
+#  data$Rank <- 1:nrow(data)                           #adds "Rank" column
+  
+  #return if statements
+  if(num == "best"){     #first entry
+    return(head(data$Hospital,1))
+  }
+  if(num == "worst"){    #last entry
+    return(tail(data$Hospital.Name,1))
+  } 
+  if(as.numeric(num) > nrow(data)){   #asking for nonexistent index
+    return(NA)
+  } else {               #normal return
+    return(data[num,1])
+  }
+    
 }
