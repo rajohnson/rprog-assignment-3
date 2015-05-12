@@ -10,7 +10,7 @@ best <- function(state, outcome) {
   conditioncol <- as.numeric(codes[outcome])
   
   # Check that state and outcome are valid
-  if(!exists(state,where=state.abb)){
+  if(!is.element(state, state.abb)){
     stop("invalid state")
     return(geterrmessage())
   }
