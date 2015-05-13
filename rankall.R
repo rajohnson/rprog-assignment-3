@@ -27,17 +27,12 @@ rankall <- function(outcome, num = "best") {
   names(data)[3] <- "Rate"                            #renames conditioncol to "Rate"
   names(data)[2] <- "state"                            #renames state to "state"
   data <- data[order(data$state, data$Rate, data$Hospital.Name),] #sorts by state, rate, then name
-  return(data)
+  data$rank <- NA
   for(st in state.abb){
-    minind <- which.min(data$state == st)
     numst <- sum(data$state == st)
-    lastind <- minind + numst - 1
-    minind
-    numst
-    lastind
-    data[minind:lastind, "rank"] <- 1:(numst)
+    data[which(data$state == st),"rank"] <- 1:(numst)
   }
-  data
+
   # for(st in state.abb)
  #   data[,data$rank] <- 1:nrow(data$state = st)          
   
