@@ -6,7 +6,7 @@
 ## num is the ranking desired, possible inputs are "best", "worst", and a numerical value which corresponds to a specific ranking.
 rankall <- function(outcome, num = "best") {
   if(num=="best")
-    num <- as.numeric(1)
+    num <- 1
   state.abb<-state.abb[order(state.abb)]
   
   # Tie conditioncol to appropriate column for given outcome
@@ -37,26 +37,13 @@ rankall <- function(outcome, num = "best") {
     numst <- sum(data$state == st)
     data[which(data$state == st),"rank"] <- 1:numst
     if(num == "worst"){
-      output[st,] <- data[which(data$state == st & data$rank == data[max(subset(data, data$state == st, select = "rank")),c(1,2)]
+      output[st,] <- data[which(data$state == st & data$rank == max(subset(data, data$state == st, select = "rank"))),c(1,2)] #last ranked hospital for each state
     } else {
-      if(numst<= num){
-        output[st,] <- data[which(data$state == st & data$rank == num),c(1,2)]
+      if(numst >= as.numeric(num)){
+        output[st,1] <- data[which(data$state == st & data$rank == num),1]  #num-th hospita
       }
     }
   }
-      
-  
-  output
-
-  
-#   #return if statements
-#   if(num == "worst"){    #last entry
-#     return(tail(data$Hospital.Name,1))
-#   } 
-#   if(as.numeric(num) > nrow(data)){   #asking for nonexistent index
-#     return(NA)
-#   } else {               #normal return
-#     return(data[num,1])
-#   }
-  
+  output$state <- state.abb #add states to output
+  return(output)
 }
