@@ -5,6 +5,9 @@
 ## outcome is the health condtion of interest, it can be "heart attack", "heart failure", or "pneumonia"
 ## num is the ranking desired, possible inputs are "best", "worst", and a numerical value which corresponds to a specific ranking.
 rankall <- function(outcome, num = "best") {
+  if(num=="best")
+    num <- as.numeric(1)
+  state.abb<-state.abb[order(state.abb)]
   
   # Tie conditioncol to appropriate column for given outcome
   codes <- c("heart attack" = 11, "heart failure" = 17, "pneumonia" = 23)
@@ -28,18 +31,25 @@ rankall <- function(outcome, num = "best") {
   names(data)[2] <- "state"                            #renames state to "state"
   data <- data[order(data$state, data$Rate, data$Hospital.Name),] #sorts by state, rate, then name
   data$rank <- NA
+  output <- data.frame(row.names=state.abb)
+  output$state <- output$hospital <- NA
   for(st in state.abb){
     numst <- sum(data$state == st)
-    data[which(data$state == st),"rank"] <- 1:(numst)
+    data[which(data$state == st),"rank"] <- 1:numst
+    if(num == "worst"){
+      output[st,] <- data[which(data$state == st & data$rank == data[max(subset(data, data$state == st, select = "rank")),c(1,2)]
+    } else {
+      if(numst<= num){
+        output[st,] <- data[which(data$state == st & data$rank == num),c(1,2)]
+      }
+    }
   }
+      
+  
+  output
 
-  # for(st in state.abb)
- #   data[,data$rank] <- 1:nrow(data$state = st)          
   
 #   #return if statements
-#   if(num == "best"){     #first entry
-#     return(head(data$Hospital,1))
-#   }
 #   if(num == "worst"){    #last entry
 #     return(tail(data$Hospital.Name,1))
 #   } 
